@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Animated Registration Form</title>
+  <style>
+    /* Reset default styles */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    /* Body Styling */
+    body {
+      font-family: Arial, sans-serif;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      background: linear-gradient(135deg, #6e8efb, #a777e3);
+    }
+
+    /* Container Styling */
+    .registration-container {
+      width: 350px;
+      padding: 40px;
+      background: #fff;
+      border-radius: 8px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+      transform: scale(0.9);
+      animation: popIn 0.5s forwards;
+    }
+
+    /* Title Styling */
+    .registration-container h2 {
+      text-align: center;
+      margin-bottom: 24px;
+      color: #333;
+    }
+
+    /* Input Box Styling */
+    .input-box {
+      position: relative;
+      margin-bottom: 20px;
+    }
+
+    /* Input Field Styling */
+    .input-box input {
+      width: 100%;
+      padding: 10px;
+      font-size: 16px;
+      color: #333;
+      background: transparent;
+      border: none;
+      border-bottom: 2px solid #adadad;
+      outline: none;
+      transition: 0.2s;
+    }
+
+    /* Label Styling */
+    .input-box label {
+      position: absolute;
+      top: 50%;
+      left: 10px;
+      color: #adadad;
+      font-size: 16px;
+      pointer-events: none;
+      transform: translateY(-50%);
+      transition: 0.3s;
+    }
+
+    /* Label Animation on Input Focus */
+    .input-box input:focus ~ label,
+    .input-box input:valid ~ label {
+      top: -10px;
+      left: 0;
+      color: #6e8efb;
+      font-size: 12px;
+    }
+
+    /* Button Styling */
+    .register-btn {
+      width: 100%;
+      padding: 10px;
+      font-size: 16px;
+      color: #fff;
+      background: #6e8efb;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    /* Button Hover Effect */
+    .register-btn:hover {
+      background: #a777e3;
+    }
+
+    /* Pop-in Animation */
+    @keyframes popIn {
+      from {
+        transform: scale(0.9);
+        opacity: 0;
+      }
+      to {
+        transform: scale(1);
+        opacity: 1;
+      }
+    }
+
+    /* Back to Login Button */
+    .login-link {
+      display: block;
+      text-align: center;
+      margin-top: 20px;
+      color: #666;
+      font-size: 14px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="registration-container">
+    <h2>Register</h2>
+    <form id="registrationForm">
+      <div class="input-box">
+        <input type="text" required id="fullName">
+        <label>Full Name</label>
+      </div>
+      <div class="input-box">
+        <input type="tel" required id="phoneNumber">
+        <label>Phone Number</label>
+      </div>
+      <div class="input-box">
+        <input type="text" required id="username">
+        <label>Email</label>
+      </div>
+      <div class="input-box">
+        <input type="password" required id="password">
+        <label>Password</label>
+      </div>
+      <div class="input-box">
+        <input type="password" required id="confirmPassword">
+        <label>Confirm Password</label>
+      </div>
+      <button type="button" class="register-btn" onclick="validateForm()">Register</button>
+    </form>
+    <span class="login-link" onclick="location.href='login.html';">Already have an account? Login</span>
+  </div>
+
+  <script>
+    function validateForm() {
+      const username = document.getElementById('username').value.trim();
+      const password = document.getElementById('password').value.trim();
+      const confirmPassword = document.getElementById('confirmPassword').value.trim();
+
+      // Validate password match
+      if (password !== confirmPassword) {
+        alert('Passwords do not match.');
+        return;
+      }
+
+      // Construct user data object
+      const userData = {
+        fullName: document.getElementById('fullName').value.trim(),
+        phoneNumber: document.getElementById('phoneNumber').value.trim(),
+        username,
+        password
+      };
+
+      // Send user data to the server
+      fetch('/register', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(userData)
+      })
+      .then(response => {
+        if (response.ok) {
+          alert('Registration successful! You will be redirected to the login page.');
+          // Do not redirect here; handle redirection on the server side
+        } else {
+          alert('Registration failed. Please try again.');
+        }
+      })
+      .catch(error => {
+        console.error('Error:', error);
+        alert('An error occurred. Please try again.');
+      });
+    }
+  </script>
+
+</body>
+</html>

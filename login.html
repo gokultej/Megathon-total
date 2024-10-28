@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Animated Floating Login Page</title>
+  <style>
+    /* Reset default styles */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    /* Body Styling */
+    body {
+      font-family: Arial, sans-serif;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      background: linear-gradient(135deg, #6e8efb, #a777e3);
+    }
+
+    /* Container Styling */
+    .login-container {
+      width: 300px;
+      padding: 40px;
+      background: #fff;
+      border-radius: 8px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+      transform: scale(0.8);
+      animation: scaleUp 0.5s forwards, float 3s ease-in-out infinite;
+    }
+
+    /* Title Styling */
+    .login-container h2 {
+      text-align: center;
+      margin-bottom: 24px;
+      color: #333;
+    }
+
+    /* Input Box Styling */
+    .input-box {
+      position: relative;
+      margin-bottom: 20px;
+    }
+
+    /* Input Field Styling */
+    .input-box input {
+      width: 100%;
+      padding: 10px;
+      font-size: 16px;
+      color: #333;
+      background: transparent;
+      border: none;
+      border-bottom: 2px solid #adadad;
+      outline: none;
+      transition: 0.2s;
+    }
+
+    /* Label Styling */
+    .input-box label {
+      position: absolute;
+      top: 50%;
+      left: 10px;
+      color: #adadad;
+      font-size: 16px;
+      pointer-events: none;
+      transform: translateY(-50%);
+      transition: 0.3s;
+    }
+
+    /* Label Animation on Input Focus */
+    .input-box input:focus ~ label,
+    .input-box input:valid ~ label {
+      top: -10px;
+      left: 0;
+      color: #6e8efb;
+      font-size: 12px;
+    }
+
+    /* Button Styling */
+    .login-btn {
+      width: 100%;
+      padding: 10px;
+      font-size: 16px;
+      color: #fff;
+      background: #6e8efb;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    /* Button Hover Effect */
+    .login-btn:hover {
+      background: #a777e3;
+    }
+
+    /* Scale-Up Animation */
+    @keyframes scaleUp {
+      from {
+        transform: scale(0.8);
+        opacity: 0;
+      }
+      to {
+        transform: scale(1);
+        opacity: 1;
+      }
+    }
+
+    /* Floating Animation */
+    @keyframes float {
+      0%, 100% {
+        transform: translateY(0);
+      }
+      50% {
+        transform: translateY(-10px);
+      }
+    }
+
+    /* No Account Text Styling */
+    .no-account {
+      display: block;
+      text-align: center;
+      margin-top: 20px;
+      color: #666;
+      font-size: 14px;
+    }
+
+    /* Register Button Styling */
+    .register-btn {
+      width: 100%;
+      padding: 10px;
+      font-size: 16px;
+      color: #fff;
+      background: #6e8efb;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: 0.3s;
+      margin-top: 10px;
+    }
+
+    .register-btn:hover {
+      background: #a777e3;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="login-container">
+    <h2>Login</h2>
+    <form id="login-form">
+      <div class="input-box">
+        <input type="text" name="username" id="username" required>
+        <label>Username</label>
+      </div>
+      <div class="input-box">
+        <input type="password" name="password" id="password" required>
+        <label>Password</label>
+      </div>
+      <button type="submit" class="login-btn">Login</button>
+    </form>
+    <span class="no-account">No account?</span>
+    <button type="button" class="register-btn">Register</button>
+  </div>
+
+  <script>
+    // Fetch and load the register page content
+    document.querySelector('.register-btn').addEventListener('click', () => {
+      window.location.href = '/register'; // Redirect to the register page
+    });
+
+    // Handle login form submission
+    document.getElementById('login-form').addEventListener('submit', async (event) => {
+      event.preventDefault(); // Prevent default form submission
+
+      const username = document.getElementById('username').value.trim();
+      const password = document.getElementById('password').value.trim();
+
+      try {
+        const response = await fetch('/login', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ username, password }),
+        });
+
+        if (response.redirected) {
+          window.location.href = response.url; // Redirect to the new URL if redirected
+        } else if (response.ok) {
+          alert('Login successful!'); // This might not be necessary anymore
+        } else {
+          const errorMessage = await response.text();
+          alert(errorMessage);
+        }
+      } catch (error) {
+        console.error('Error:', error);
+        alert('An error occurred. Please try again.');
+      }
+    });
+  </script>
+
+</body>
+</html>

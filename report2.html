@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Graph Analysis</title>
+</head>
+<body>
+    <h1>Graph Analysis from MongoDB Data</h1>
+    <button id="generateGraphsBtn">Generate Graphs</button>
+    <div id="graphsContainer">
+        <h2>Sentiment Analysis Graph:</h2>
+        <img id="sentimentGraph" src="/static/plots/sentiment_analysis.png" alt="Sentiment Analysis" style="display:none;">
+    </div>
+
+    <script>
+        document.getElementById('generateGraphsBtn').addEventListener('click', function() {
+            fetch('/getGraphs')
+                .then(response => {
+                    if (!response.ok) throw new Error('Error generating graphs');
+                    return response.json();
+                })
+                .then(data => {
+                    console.log(data);
+                    // Show the generated graph
+                    document.getElementById('sentimentGraph').style.display = 'block';
+                })
+                .catch(error => console.error('Error:', error));
+        });
+    </script>
+</body>
+</html>

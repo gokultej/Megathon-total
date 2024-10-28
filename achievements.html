@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>User Performance Dashboard</title>
+  <style>
+    /* Reset default styles */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    /* Body Styling */
+    body {
+      font-family: Arial, sans-serif;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background-color: #f4f6f9;
+      padding: 20px;
+    }
+
+    /* Dashboard Container */
+    .dashboard-container {
+      max-width: 900px;
+      width: 100%;
+      background-color: #fff;
+      border-radius: 8px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+      padding: 20px;
+    }
+
+    /* Header Styling */
+    .dashboard-header {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+
+    .dashboard-header h2 {
+      font-size: 24px;
+      color: #333;
+    }
+
+    /* Performance Summary */
+    .performance-summary {
+      display: flex;
+      justify-content: space-around;
+      padding: 20px;
+      margin-bottom: 30px;
+      border-radius: 8px;
+      background-color: #f9fafc;
+    }
+
+    .summary-item {
+      text-align: center;
+    }
+
+    .summary-item h3 {
+      font-size: 18px;
+      color: #555;
+      margin-bottom: 8px;
+    }
+
+    .summary-item p {
+      font-size: 24px;
+      font-weight: bold;
+      color: #6e8efb;
+    }
+
+    /* Badges Section */
+    .badges-section {
+      padding: 20px;
+      border-top: 1px solid #e0e0e0;
+      text-align: center;
+    }
+
+    .badges-section h3 {
+      font-size: 20px;
+      color: #333;
+      margin-bottom: 20px;
+    }
+
+    .badges {
+      display: flex;
+      justify-content: space-around;
+      flex-wrap: wrap;
+    }
+
+    .badge {
+      width: 120px;
+      height: 120px;
+      background-color: #fff;
+      border: 3px solid #6e8efb;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #6e8efb;
+      font-size: 24px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: 0.3s;
+      margin: 10px;
+      position: relative;
+    }
+
+    .badge.unlocked {
+      background-color: #6e8efb;
+      color: #fff;
+    }
+
+    .badge:hover {
+      box-shadow: 0 4px 10px rgba(110, 142, 251, 0.4);
+    }
+
+    /* Tagline Styling */
+    .tagline {
+      font-size: 14px;
+      color: #555;
+      text-align: center;
+      margin-top: 10px;
+    }
+
+    /* Streaks Section */
+    .streak-section {
+      margin-top: 30px;
+      text-align: center;
+    }
+
+    .streak-section img {
+      width: 50px;
+      margin-top: 10px;
+    }
+
+    .streak-text {
+      font-size: 16px;
+      color: #6e8efb;
+      margin-top: 10px;
+    }
+
+  </style>
+</head>
+<body>
+
+  <div class="dashboard-container">
+    <!-- Dashboard Header -->
+    <div class="dashboard-header">
+      <h2>User Performance Dashboard</h2>
+    </div>
+
+    <!-- Performance Summary -->
+    <div class="performance-summary">
+      <div class="summary-item">
+        <h3>Tasks Completed</h3>
+        <p id="tasksCompleted"></p>
+      </div>
+      <div class="summary-item">
+        <h3>Duration</h3>
+        <p id="hoursSpent"></p>
+      </div>
+      <div class="summary-item">
+        <h3>Progress Rate</h3>
+        <p id="progressRate"></p>
+      </div>
+    </div>
+
+    <!-- Badges Section -->
+    <div class="badges-section">
+      <h3>Achievements</h3>
+      <div class="badges">
+        <div class="badge" id="newbieBadge" onclick="showBadgeDetails('Newbie')">
+          <span>🏅</span>
+          <div class="tagline">"One step at a time"</div>
+        </div>
+        <div class="badge" id="achieverBadge" onclick="showBadgeDetails('Achiever')">
+          <span>🎖️</span>
+          <div class="tagline">"Believe in progress"</div>
+        </div>
+        <div class="badge" id="expertBadge" onclick="showBadgeDetails('Expert')">
+          <span>🏆</span>
+          <div class="tagline">"Strength in resilience"</div>
+        </div>
+        <div class="badge" id="masterBadge" onclick="showBadgeDetails('Master')">
+          <span>🥇</span>
+          <div class="tagline">"Limitless potential"</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Streak Section -->
+    <div class="streak-section">
+      <h3>Daily Streaks</h3>
+      <div class="streaks-section">
+        Daily Activity Streak: <span id="streakCount">🔥</span><span id="streakValue">0</span>
+      </div>
+    </div>
+
+      
+    </div>
+  </div>
+
+  <script>
+    // Simulate task completion check
+    let tasksCompleted = 0;// This would normally come from dynamic data
+
+    function unlockBadges() {
+      // Unlock badges based on task completion
+      if (tasksCompleted >= 10) document.getElementById('newbieBadge').classList.add('unlocked');
+      if (tasksCompleted >= 30) document.getElementById('achieverBadge').classList.add('unlocked');
+      if (tasksCompleted >= 60) document.getElementById('expertBadge').classList.add('unlocked');
+      if (tasksCompleted >= 100) document.getElementById('masterBadge').classList.add('unlocked');
+    }
+
+    function showBadgeDetails(badgeName) {
+      // Display a message with badge details based on the badge clicked
+      if (document.getElementById(badgeName.toLowerCase() + 'Badge').classList.contains('unlocked')) {
+        alert("You've earned the " + badgeName + " badge! Keep up the great work!");
+      } else {
+        alert("Complete more tasks to unlock the " + badgeName + " badge!");
+      }
+    }
+
+    // Unlock badges based on current task completion
+    unlockBadges();
+  </script>
+
+</body>
+</html>
+
+

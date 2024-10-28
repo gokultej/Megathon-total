@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Results</title>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            padding: 20px;
+        }
+        #redirectButton {
+            position: absolute; /* Position it in the top right corner */
+            top: 20px;
+            right: 20px;
+            padding: 10px 15px;
+            font-size: 16px;
+            cursor: pointer;
+            background-color: #4CAF50; /* Green background */
+            color: white; /* White text */
+            border: none; /* Remove borders */
+            border-radius: 5px; /* Rounded corners */
+        }
+        #redirectButton:hover {
+            background-color: #45a049; /* Darker green on hover */
+        }
+    </style>
+</head>
+<body>
+    <h1>Analysis Results</h1>
+    <button id="fetch1DayBtn">Fetch Results from Last 1 Day</button>
+    <button id="fetch1WeekBtn">Fetch Results from Last 1 Week</button>
+    <button id="fetch1MonthBtn">Fetch Results from Last 1 Month</button>
+    <button id="fetch1YearBtn">Fetch Results from Last 1 Year</button>
+    <div id="dataContainer"></div>
+
+    <!-- Button to redirect to achievements page -->
+    <button id="redirectButton">Go to Achievements</button>
+
+    <script>
+        async function fetchData(timeRange) {
+            const response = await fetch(`/getAnalysisData/${timeRange}`);
+            const data = await response.json();
+            const dataContainer = document.getElementById("dataContainer");
+            dataContainer.innerHTML = ""; // Clear previous results
+
+            // Display the count of values for the time range
+            const countMessage = `<p>Number of results: ${data.length}</p>`;
+            dataContainer.innerHTML += countMessage;
+
+            // Display results
+            data.forEach(result => {
+                dataContainer.innerHTML += `
+                    <div>
+                        <p>User Input: ${result.userInput}</p>
+                        <p>Emotion Label: ${result.emolabel}</p>
+                        <p>Timestamp: ${new Date(result.timestamp).toLocaleString()}</p>
+                        <hr>
+                    </div>
+                `;
+            });
+        }
+
+        document.getElementById("fetch1DayBtn").addEventListener("click", () => fetchData('1day'));
+        document.getElementById("fetch1WeekBtn").addEventListener("click", () => fetchData('1week'));
+        document.getElementById("fetch1MonthBtn").addEventListener("click", () => fetchData('1month'));
+        document.getElementById("fetch1YearBtn").addEventListener("click", () => fetchData('1year'));
+
+        // Redirect to achievements page
+        document.getElementById("redirectButton").addEventListener("click", () => {
+            window.location.href = '/achievements'; // Adjust the URL according to your routing
+        });
+    </script>
+</body>
+</html>

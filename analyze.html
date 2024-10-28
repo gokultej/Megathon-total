@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Emotion and Sentiment Analysis</title>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+        }
+
+        h1 {
+            margin-bottom: 20px;
+        }
+
+        #analysisForm {
+            margin-bottom: 20px;
+        }
+
+        /* Floating box styling */
+        #container {
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            padding: 20px;
+            background-color: #fff;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            width: 320px; /* Width of the box */
+            text-align: center; /* Center text */
+        }
+
+        #result {
+            margin-top: 20px; /* Space between form and results */
+            width: 100%; /* Use full width of the container */
+        }
+
+        /* Button styling */
+        #generateVisualize {
+            margin-top: 20px; /* Space above the button */
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            background-color: #007BFF;
+            color: white;
+            cursor: pointer;
+        }
+
+        #generateVisualize:hover {
+            background-color: #0056b3; /* Darker shade on hover */
+        }
+    </style>
+</head>
+<body>
+    <div id="container">
+        <h1>Emotion and Sentiment Analysis</h1>
+        <form id="analysisForm">
+            <label for="textInput">Enter a sentence:</label>
+            <input type="text" id="textInput" name="text" required>
+            <button type="submit">Analyze</button>
+        </form>
+        <h2>Results:</h2>
+        <div id="result"></div>
+        <button id="generateVisualize">Generate Time series Shifting</button> <!-- New button added -->
+    </div>
+
+    <script>
+        // Function to format date and time
+        function formatDateTime(timestamp) {
+            const date = new Date(timestamp);
+            const day = String(date.getDate()).padStart(2, '0');
+            const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are zero-indexed
+            const year = date.getFullYear();
+            const hours = date.getHours();
+            const minutes = String(date.getMinutes()).padStart(2, '0');
+            const ampm = hours >= 12 ? 'PM' : 'AM';
+            const formattedHours = String(hours % 12 || 12).padStart(2, '0'); // Convert to 12-hour format
+
+            return `${day}/${month}/${year} ${formattedHours}:${minutes} ${ampm}`;
+        }
+
+        // Function to display fetched data
+        function displayData(data) {
+            const resultDiv = document.getElementById('result');
+            const emotionConfidence = (data.emoco * 10).toFixed(2); // Convert to percentage
+
+            resultDiv.innerHTML = `
+                <p>Sentiment Label: ${data.sentls}</p>
+                <p>Sentiment Confidence: ${data.sentco}</p>
+                <p>Emotion Label: ${data.emolabel}</p>
+                <p>Emotion Confidence: ${emotionConfidence}%</p> <!-- Display as percentage -->
+                <p>Uploaded At: ${formatDateTime(data.timestamp)}</p>
+            `;
+        }
+
+        document.getElementById("analysisForm").addEventListener("submit", async (event) => {
+            event.preventDefault();
+
+            // Get the user's input
+            const textInput = document.getElementById("textInput").value;
+
+            // Send a POST request to analyze the input
+            try {
+                const response = await fetch("http://localhost:3000/analyze", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ text: textInput })
+                });
+
+                // Process response if you need to analyze the input
+                const analyzeData = await response.json();
+                console.log('Analysis data:', analyzeData);
+                
+                // Optionally, you could call displayData(analyzeData) here
+
+            } catch (error) {
+                console.error("Error:", error.message);
+            }
+
+            // Fetch and display input data
+            try {
+                const fetchResponse = await fetch("http://localhost:3000/getInputData");
+                const data = await fetchResponse.json();
+                displayData(data);
+            } catch (error) {
+                console.error("Error fetching input data:", error.message);
+            }
+        });
+
+        // Event listener for the Generate Visualize button
+        document.getElementById("generateVisualize").addEventListener("click", () => {
+            window.location.href = "/report"; // Redirect to the report page
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>User Input Form</title>
+  <style>
+    /* Reset default styles */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    /* Body Styling */
+    body {
+      font-family: Arial, sans-serif;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      background: linear-gradient(135deg, #6e8efb, #a777e3);
+    }
+
+    /* Container Styling */
+    .input-container {
+      width: 400px;
+      padding: 40px;
+      background: #fff;
+      border-radius: 8px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+      position: relative; /* Allow absolute positioning of the logo */
+    }
+
+    /* Title Styling */
+    .input-container h2 {
+      text-align: center;
+      margin-bottom: 24px;
+      color: #333;
+    }
+
+    /* Input Box Styling */
+    .input-box {
+      position: relative;
+      margin-bottom: 20px;
+    }
+
+    /* Input Field Styling */
+    .input-box input,
+    .input-box textarea,
+    .input-box select {
+      width: 100%;
+      padding: 10px;
+      font-size: 16px;
+      color: #333;
+      background: transparent;
+      border: 2px solid #adadad;
+      border-radius: 4px;
+      outline: none;
+      transition: 0.2s;
+    }
+
+    /* Button Styling */
+    .submit-btn {
+      width: 100%;
+      padding: 10px;
+      font-size: 16px;
+      color: #fff;
+      background: #6e8efb;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    /* Button Hover Effect */
+    .submit-btn:hover {
+      background: #a777e3;
+    }
+
+    /* Profile Logo Styling */
+    .profile-logo {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      width: 40px; /* Adjust size as needed */
+      height: 40px; /* Adjust size as needed */
+      object-fit: cover; /* Maintain aspect ratio */
+      cursor: pointer; /* Show pointer cursor on hover */
+    }
+  </style>
+</head>
+<body>
+
+  <div class="input-container">
+    <a href="profile.html">
+      <img src="profile.jpeg" alt="Profile Logo" class="profile-logo">
+    </a>
+    
+    <h2>User Input</h2>
+    <form id="userInputForm" onsubmit="return handleSubmit(event);">
+      <div class="input-box">
+        <textarea id="userMessage" rows="4" required placeholder="Your Message"></textarea>
+      </div>
+      <button type="submit" class="submit-btn">Submit</button>
+    </form>
+  </div>
+
+  <script>
+    function handleSubmit(event) {
+      event.preventDefault(); // Prevent form submission
+
+      // Get the message from the textarea
+      const message = document.getElementById('userMessage').value.trim();
+
+      // Store the message in local storage
+      localStorage.setItem('userMessage', message);
+
+      // Redirect to the profile page
+      location.href = 'profile.html'; // Ensure this points to your correct profile page
+    }
+  </script>
+
+</body>
+</html>
+
+
+
+
+

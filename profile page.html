@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>User Profile</title>
+  <style>
+    /* Reset default styles */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    /* Body Styling */
+    body {
+      font-family: Arial, sans-serif;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      background: linear-gradient(135deg, #6e8efb, #a777e3);
+    }
+
+    /* Container Styling */
+    .profile-container {
+      width: 350px;
+      padding: 40px;
+      background: #fff;
+      border-radius: 8px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+      text-align: center; /* Center align text */
+    }
+
+    /* Title Styling */
+    .profile-container h2 {
+      margin-bottom: 24px;
+      color: #333;
+    }
+
+    /* Input Box Styling */
+    .input-box {
+      margin-bottom: 20px;
+    }
+
+    /* Input Field Styling */
+    .input-box input {
+      width: 100%;
+      padding: 10px;
+      font-size: 16px;
+      color: #333;
+      background: transparent;
+      border: none;
+      border-bottom: 2px solid #adadad;
+      outline: none;
+    }
+
+    /* Button Styling */
+    .edit-btn {
+      width: 100%;
+      padding: 10px;
+      font-size: 16px;
+      color: #fff;
+      background: #6e8efb;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    /* Button Hover Effect */
+    .edit-btn:hover {
+      background: #a777e3;
+    }
+
+    /* Message Styling */
+    .message {
+      color: red;
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+  <form action="/login" method="POST">
+    <div class="input-box">
+      <input type="text" name="username" required>
+      <label>Username</label>
+    </div>
+    <div class="input-box">
+      <input type="password" name="password" required>
+      <label>Password</label>
+    </div>
+    <button type="submit" class="login-btn">Login</button>
+  </form>
+  
+  <div class="profile-container">
+    <h2>User Profile</h2>
+    <div class="input-box">
+      <label>Full Name</label>
+      <input type="text" id="fullName" readonly>
+    </div>
+    <div class="input-box">
+      <label>Phone Number</label>
+      <input type="tel" id="phoneNumber" readonly>
+    </div>
+    <div class="input-box">
+      <label>Email</label>
+      <input type="email" id="email" readonly>
+    </div>
+    <div class="input-box">
+      <label>Password</label>
+      <input type="password" id="password" readonly>
+    </div>
+    
+    <button type="button" class="edit-btn" onclick="editProfile()">Edit Profile</button>
+    
+    <div class="message" id="message"></div>
+  </div>
+
+  <script>
+    // Function to load user data from local storage
+    function loadUserData() {
+      // Check if the user is logged in
+      const isLoggedIn = localStorage.getItem('isLoggedIn');
+      
+      if (isLoggedIn !== 'true') {
+        // If not logged in, display a message or redirect to the login page
+        document.getElementById('message').textContent = 'Please log in to view your profile.';
+        return; // Stop further execution
+      }
+
+      // Get user data from local storage
+      const fullName = localStorage.getItem('fullName') || '';
+      const phoneNumber = localStorage.getItem('phoneNumber') || '';
+      const email = localStorage.getItem('email') || '';
+      const password = localStorage.getItem('password') || '';
+
+      // Set input fields with user data
+      document.getElementById('fullName').value = fullName;
+      document.getElementById('phoneNumber').value = phoneNumber;
+      document.getElementById('email').value = email;
+      document.getElementById('password').value = password;
+    }
+
+    // Call loadUserData on page load
+    window.onload = loadUserData;
+
+    // Function to enable editing of the profile
+    function editProfile() {
+      const inputs = document.querySelectorAll('.input-box input');
+      inputs.forEach(input => {
+        input.removeAttribute('readonly'); // Make fields editable
+        input.style.borderBottom = '2px solid #6e8efb'; // Change border color to indicate editing
+      });
+    }
+  </script>
+
+</body>
+</html>
+
